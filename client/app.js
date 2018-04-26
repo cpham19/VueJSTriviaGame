@@ -15,7 +15,7 @@ const usersComponent = {
                     <ul v-for="user in users">
                         <li>
                             <img v-bind:src="user.avatar" class="circle" width="30px">
-                            <span>{{user.name}}</span><span>{{user.score}}</span>
+                            <span>{{user.name}}</span><span>({{user.score}})</span>
                         </li>
                         <hr>
                     </ul>
@@ -88,7 +88,7 @@ socket.on('successful-join', user => {
 })
 
 // Failed to join because username exists
-socket.on('failed-join', userName => {
-    if (userName === app.userName)
-        app.failedName = userName
+socket.on('failed-join', obj => {
+    if (obj.name === app.userName)
+        app.failedName = obj.name
 })

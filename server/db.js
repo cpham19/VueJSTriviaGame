@@ -17,7 +17,17 @@ const UserSchema = new Mongoose.Schema({
     score: Number,
 }, { strict: false })
 
+// Schema for questions
+const QuestionSchema = new Mongoose.Schema({
+    question: String,
+    possibleAnswers: [String],
+    correctAnswer: String,
+    points: Number
+}, { strict: false })
+
 const User = Mongoose.model('users', UserSchema)
+
+const Questions = Mongoose.model('questions', QuestionSchema)
 
 // Array of users
 const activeUsers = () => User.find({ socketId: { $ne: null } }, { password: 0 })
@@ -44,7 +54,7 @@ const loginUser = (userName, password, socketId) => {
             if (found.socketId != null) {
                 throw new Error('User is already logged in')
             }
-            console.log(found)
+
             return found
         })
         // active == have socketId

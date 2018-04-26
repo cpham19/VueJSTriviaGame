@@ -27,7 +27,7 @@ module.exports = (server, db) => {
                 // success
                 .then(created => io.emit('successful-join', created))
                 // error
-                .catch(err => io.emit('failed-join', { name: userName }))
+                .catch(err => io.emit('failed-join', {name: userName }))
         })
 
         socket.on('disconnect', () => {

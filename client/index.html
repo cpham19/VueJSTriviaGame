@@ -46,7 +46,9 @@
                   Sign Up
                </button>
 
-               <p v-show="failedName" class="failed">*Sorry the username<b>{{failedName}}</b> already exists.</p>
+               <div class="failed" v-show='failedName'>
+                    <p>Username '{{failedName}}' already exists or is logged in!</p>
+                </div>
             </div>
             <!-- end user join -->
 
