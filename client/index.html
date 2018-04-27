@@ -54,11 +54,23 @@
 
          </div>
 
-         <!-- gameboard column-->
+         <!-- trivia column-->
          <div class="col s8" v-show="loggedIn">
-
-            <!-- game -->
-            <trivia-component></trivia-component>
+            <!-- Textfields to add a question to database-->
+            <div>
+                <input v-model="question" placeholder="question" type="text" class="u-full-width">
+                <input v-model="possibleAnswer1" placeholder="possible answer #1" type="text" class="u-full-width">
+                <input v-model="possibleAnswer2" placeholder="possible answer #2" type="text" class="u-full-width">
+                <input v-model="possibleAnswer3" placeholder="possible answer #3" type="text" class="u-full-width">
+                <input v-model="correctAnswer" placeholder="correct answer (has to be one of the possible answers)" type="text" class="u-full-width">
+                <input v-model="points" placeholder="points" type="text" class="u-full-width">
+                <button v-on:click="submitQuestion" class="btn-small waves-effect waves-light" type="submit">Add</button>
+                <div class="failed" v-show='failedAddQuestion'>
+                        <p>Correct answer must be one of the possible answers, or points should be a number!</p>
+                </div>
+            </div>
+            <!-- trivia -->
+            <trivia-component v-bind:questionObj="questionObj"></trivia-component>
 
          </div>
 
