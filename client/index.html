@@ -51,26 +51,35 @@
                 </div>
             </div>
             <!-- end user join -->
-
          </div>
 
          <!-- trivia column-->
          <div class="col s8" v-show="loggedIn">
             <!-- Textfields to add a question to database-->
-            <div>
+            <div class="add-box">
+                <h6>Add a question</h6>
+                <hr/>
                 <input v-model="question" placeholder="question" type="text" class="u-full-width">
                 <input v-model="possibleAnswer1" placeholder="possible answer #1" type="text" class="u-full-width">
                 <input v-model="possibleAnswer2" placeholder="possible answer #2" type="text" class="u-full-width">
                 <input v-model="possibleAnswer3" placeholder="possible answer #3" type="text" class="u-full-width">
                 <input v-model="correctAnswer" placeholder="correct answer (has to be one of the possible answers)" type="text" class="u-full-width">
                 <input v-model="points" placeholder="points" type="text" class="u-full-width">
-                <button v-on:click="submitQuestion" class="btn-small waves-effect waves-light" type="submit">Add</button>
-                <div class="failed" v-show='failedAddQuestion'>
-                        <p>Correct answer must be one of the possible answers, or points should be a number!</p>
-                </div>
+                <button v-on:click="submitQuestion" class="btn-small waves-effect waves-light" type="submit">Add</button> <p class = "failed" v-show="failedAddQuestion">Correct answer must be one of the possible answers, or points must be a number!</p>
             </div>
+
+            <div class="question-box"> 
+                <h6>Questions in Database ({{listOfQuestions.length}})</h6>
+                <hr/>
+                <p v-for="obj in listOfQuestions">
+                    {{obj.question}} <button v-on:click="deleteQuestion(obj.question)" class="btn-small waves-effect waves-light" type="submit">Delete</button>
+                </p>
+            </div>
+            
+            <!-- <questions-component v-bind:listOfQuestions="listOfQuestions"></questions-component> -->
+
             <!-- trivia -->
-            <trivia-component v-bind:questionObj="questionObj"></trivia-component>
+            <!-- <trivia-component v-bind:questionObj="questionObj"></trivia-component> -->
 
          </div>
 

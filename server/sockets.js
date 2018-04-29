@@ -7,11 +7,11 @@ module.exports = (server, db) => {
         // when a connection is made - load in the content already present on the server
         db.activeUsers().then(users => socket.emit('refresh-users', users))
 
-        // Generate a random question and send to the app.js
-        db.questions().then(questions=> {
-            const randomQuestion = questions[Math.floor(Math.random() * questions.length)]
-            socket.emit('refresh-question', randomQuestion)
-        })
+        // Load the questions already present on the server
+        db.questions().then(questions => socket.emit('refresh-questions', questions))
+
+        //const randomQuestion = questions[Math.floor(Math.random() * questions.length)]
+         //socket.emit('refresh-question', randomQuestion)
 
         // demo code only for sockets + db
         // in production login/user creation should happen with a POST to https endpoint
@@ -41,6 +41,21 @@ module.exports = (server, db) => {
                 .then(created => io.emit('successful-entry', created))
                 // error
                 .catch(err => io.emit('failed-entry', {question: question}))
+
+            // // Update the list of questions
+            // db.questions().then(questions=> socket.emit('refresh-questions', questions))
+        })
+
+        socket.on('delete-question', (question) => {
+            // delete question
+            db.deleteQuestion(question)
+                // success
+                .then(deleted => io.emit('successful-delete', deleted))
+                // error
+                .catch(err => io.emit('failed-delete', question))
+
+            // // Update the list of questions
+            // db.questions().then(questions=> socket.emit('refresh-questions', questions))
         })
 
         socket.on('disconnect', () => {

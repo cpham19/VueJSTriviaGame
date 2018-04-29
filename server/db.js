@@ -43,11 +43,18 @@ const findUserByName = userName => User.findOne({ name: { $regex: `^${userName}$
 // Used for validating question using regular expression ('What is...' = 'what is...')
 const findQuestion = question => Question.findOne({ question: { $regex: `^${question}$`, $options: 'i' } })
 
+const removeQuestion = question => Question.remove({question: question})
+
+const updateQuestions = () => {
+    return questions().then(listOfQuestions => {return listOfQuestions})
+}
+
 // Validating user for logging in
 const loginUser = (userName, password, socketId) => {
     // Find if the username is in the db
     return findUserByName(userName)
         .then(found => {
+            // Checks if username doesn't exist
             if (!found) {
                 throw new Error('User does not exists')
             }
@@ -78,10 +85,12 @@ const createUser = (userName, password, socketId) => {
     // Return a user object if username is in db
     return findUserByName(userName)
         .then(found => {
+            // Check if username is taken already
             if (found) {
                 throw new Error('User already exists')
             }
 
+            // Return an object if username doesnt exist
             return {
                 socketId,
                 name: userName,
@@ -103,9 +112,11 @@ const createQuestion = (question, possibleAnswer1, possibleAnswer2, possibleAnsw
     // Return a user object if username is in db
     return findQuestion(question)
         .then(found => {
+            // Checks if the user puts the same question
             if (found) {
                 throw new Error('Question already exists')
             }
+            // Validate that user puts the correct answer properly
             else if (!((correctAnswer === possibleAnswer1) || (correctAnswer === possibleAnswer2) || (correctAnswer === possibleAnswer3))) {
                 throw new Error('Correct answer must be one of the possible answers')
             }
@@ -125,6 +136,22 @@ const createQuestion = (question, possibleAnswer1, possibleAnswer2, possibleAnsw
         })
 }
 
+// Create a question
+const deleteQuestion = (question) => {
+    // Return a user object if username is in db
+    return removeQuestion(question)
+        .then(found => {
+            if (!found) {
+                throw new Error('Question does not exist')
+            }
+            return {
+                question: question,
+            }
+        })
+        // Return question
+        .then(questionObj => {return questionObj})
+}
+
 // Logout the user by setting the user's socketid to null
 const logoutUser = socketId => {
     return User.findOneAndUpdate({ socketId }, { $set: { socketId: null } })
@@ -136,5 +163,6 @@ module.exports = {
     loginUser,
     logoutUser,
     createQuestion,
+    deleteQuestion,
     questions
 }

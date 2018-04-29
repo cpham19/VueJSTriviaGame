@@ -1,8 +1,17 @@
 const socket = io()
 
+const questionsComponent = {
+    template: ` <div class="question-box">
+                    <p v-for="obj in listOfQuestions">
+                        {{obj.question}}
+                    </p>
+                </div>`,
+    props:[`listOfQuestions`]
+}
+
 // Trivia component
 const triviaComponent = {
-	template: ` <div class="trivia-box">
+    template: ` <div class="trivia-box">
                     <p>PLACEHOLDER QUESTIONOBJ</p>
 	            </div>`,
 
@@ -50,7 +59,9 @@ const app = new Vue({
         correctAnswer: '',
         points:'',
         questionObj: {},
-        failedAddQuestion: false
+        failedAddQuestion: false,
+        listOfQuestions: [],
+        checkedQuestions: [],
     },
     created: function() {
         // Unload resources after closing tab or browser
@@ -80,6 +91,9 @@ const app = new Vue({
 
             socket.emit('create-question', this.question, this.possibleAnswer1, this.possibleAnswer2, this.possibleAnswer3, this.correctAnswer, this.points)
         },
+        deleteQuestion: function(selectedQuestion) {
+            socket.emit('delete-question', selectedQuestion)
+        },
         selectAnswer: function(answer) {
             if (!this.answer) {
                 return
@@ -91,15 +105,21 @@ const app = new Vue({
     components: {
         'users-component': usersComponent,
         'trivia-component': triviaComponent,
-        'me-component': meComponent
+        'me-component': meComponent,
+        'questions-component' : questionsComponent,
     }
 })
 
 // Client Side Socket Event
 
+socket.on('refresh-questions', questions => {
+    console.log(questions)
+    app.listOfQuestions = questions
+})
+
 // Refresh question
 socket.on('refresh-question', questionObj => {
-    console.log(questionObj)
+    //console.log(questionObj)
     app.questionObj = questionObj
 })
 
@@ -127,7 +147,7 @@ socket.on('failed-join', obj => {
 })
 
 // Successfully added a question
-socket.on('successful-entry', questionObj => {
+socket.on('successful-entry', obj => {
     app.failedAddQuestion = false
     app.question = ''
     app.possibleAnswer1 = ''
@@ -135,9 +155,15 @@ socket.on('successful-entry', questionObj => {
     app.possibleAnswer3 = ''
     app.correctAnswer = ''
     app.points = ''
+    app.listOfQuestions.push(obj)
 })
 
 // Failed to add a question
-socket.on('failed-entry', questionObj => {
+socket.on('failed-entry', obj => {
     app.failedAddQuestion = true
+})
+
+// Successfully delete a question
+socket.on('successful-delete', obj => {
+    app.listOfQuestions = app.listOfQuestions.filter(questionObj => !(obj.question === questionObj.question))
 })

@@ -86,34 +86,59 @@ hr {
     color: #fb78ad;
 }
 
-/* CHAT BOX STYLES */
-
-.chat-box {
-    background: #FFFFFF;
+/* TRIVIA STYLES */
+.question-box {
+    background: #ffffff;
+    border: 5px solid #000000;
     border-radius: 4px;
-    margin: 25px 5px;
-    min-height: 500px;
-    max-height: 500px;
+    margin: 10px 5px;
+    min-width: 700px;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 200px;
     padding: 10px;
     overflow-y: auto;
 }
 
-.chat-box strong {
+.add-box {
+    background: #ffffff;
+    border: 5px solid #000000;
+    border-radius: 4px;
+    margin: 10px 5px;
+    min-width: 700px;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 200px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.trivia-box {
+    background: #FFFFFF;
+    border-radius: 4px;
+    margin: 25px 5px;
+    min-height: 100px;
+    max-height: 100px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.trivia-box strong {
     font-family: 'Rajdhani', sans-serif;
     font-weight: bold;
     font-size: 17px;
 }
 
-.chat-box small {
+.trivia-box small {
     color: #AAAAAA;
 }
 
-.chat-box p {
+.trivia-box p {
     border-bottom: #efefef solid 1px;
     padding-bottom: 12px;
 }
 
-.chat-box img {
+.trivia-box img {
     border: 1px solid #d0d0d0;
     vertical-align: middle;
 }
