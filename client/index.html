@@ -26,7 +26,7 @@
       <div class="row">
 
          <!-- users column -->
-         <div class="col s4">
+         <div class="col s3">
 
             <!-- me component -->
             <me-component v-bind:me="me"></me-component>
@@ -47,7 +47,7 @@
                </button>
 
                <div class="failed" v-show='failedName'>
-                    <p>Username '{{failedName}}' already exists or is logged in!</p>
+                    <p>Username '{{failedName}}' doesn't exists or is logged in!</p>
                 </div>
             </div>
             <!-- end user join -->
@@ -56,27 +56,43 @@
          <!-- trivia column-->
          <div class="col s8" v-show="loggedIn">
             <!-- Textfields to add a question to database-->
-            <div class="add-box">
-                <h6>Add a question</h6>
-                <hr/>
-                <input v-model="question" placeholder="question" type="text" class="u-full-width">
-                <input v-model="possibleAnswer1" placeholder="possible answer #1" type="text" class="u-full-width">
-                <input v-model="possibleAnswer2" placeholder="possible answer #2" type="text" class="u-full-width">
-                <input v-model="possibleAnswer3" placeholder="possible answer #3" type="text" class="u-full-width">
-                <input v-model="correctAnswer" placeholder="correct answer (has to be one of the possible answers)" type="text" class="u-full-width">
-                <input v-model="points" placeholder="points" type="text" class="u-full-width">
-                <button v-on:click="submitQuestion" class="btn-small waves-effect waves-light" type="submit">Add</button> <p class = "failed" v-show="failedAddQuestion">Correct answer must be one of the possible answers, or points must be a number!</p>
-            </div>
 
-            <div class="question-box"> 
-                <h6>Questions in Database ({{listOfQuestions.length}})</h6>
-                <hr/>
-                <p v-for="obj in listOfQuestions">
-                    {{obj.question}} <button v-on:click="deleteQuestion(obj.question)" class="btn-small waves-effect waves-light" type="submit">Delete</button>
-                </p>
+            <div class="row" v-show="addTrivia">
+                <div class="column">
+                    <h6 align="center">Add a question</h6>
+                    <hr>
+                    <input v-model="question" placeholder="question" type="text" class="u-full-width">
+                    <input v-model="possibleAnswer1" placeholder="possible answer #1" type="text" class="u-full-width">
+                    <input v-model="possibleAnswer2" placeholder="possible answer #2" type="text" class="u-full-width">
+                    <input v-model="possibleAnswer3" placeholder="possible answer #3" type="text" class="u-full-width">
+                    <input v-model="correctAnswer" placeholder="correct answer (has to be one of the possible answers)" type="text" class="u-full-width">
+                    <input v-model="points" placeholder="points" type="text" class="u-full-width">
+                    <button v-on:click="submitQuestion" class="block" type="submit">Add</button> <p class = "failed" v-show="failedAddQuestion">Correct answer must be one of the possible answers, or points must be a number!</p>
+                </div>
+    
+                <div class="column"> 
+                    <h6 align="center">Questions in Database ({{listOfQuestions.length}})</h6>
+                    <hr>
+                    <ul v-for="obj in listOfQuestions">
+                        <li>
+                            <p>{{obj.question}} <button v-on:click="deleteQuestion(obj.question)" class="delete" type="submit">Delete</button></p>
+                        </li>
+                        <hr>
+                    </ul>
+                </div>
             </div>
-            
-            <!-- <questions-component v-bind:listOfQuestions="listOfQuestions"></questions-component> -->
+            <div v-show="addTrivia">
+                <button v-on:click="toggle()" type="submit">Play Game</button> 
+            </div>
+           
+            <div class="trivia-box" v-show="!addTrivia">
+                <h6 align="center">{{questionObj.question}}</h6>
+                <hr>
+                <ul v-for="answer in questionObj.possibleAnswers">
+                    <button v-on:click="submitQuestion(answer)" class="btn-small waves-effect waves-light" type="submit">{{answer}}</button>
+                </ul>
+                <button v-on:click="toggle()" type="submit">Add Question</button> 
+            </div>
 
             <!-- trivia -->
             <!-- <trivia-component v-bind:questionObj="questionObj"></trivia-component> -->

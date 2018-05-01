@@ -1,18 +1,9 @@
 const socket = io()
 
-const questionsComponent = {
-    template: ` <div class="question-box">
-                    <p v-for="obj in listOfQuestions">
-                        {{obj.question}}
-                    </p>
-                </div>`,
-    props:[`listOfQuestions`]
-}
-
 // Trivia component
 const triviaComponent = {
     template: ` <div class="trivia-box">
-                    <p>PLACEHOLDER QUESTIONOBJ</p>
+                    <p>{{questionObj.question}}</p>
 	            </div>`,
 
 	props: ['questionObj']
@@ -21,7 +12,7 @@ const triviaComponent = {
 // Users Component
 const usersComponent = {
     template: ` <div class="user-list">
-                    <h6>Active Users ({{users.length}})</h6>
+                    <h6 align="center">Active Users ({{users.length}})</h6>
                     <ul v-for="user in users">
                         <li>
                             <img v-bind:src="user.avatar" class="circle" width="30px">
@@ -61,7 +52,8 @@ const app = new Vue({
         questionObj: {},
         failedAddQuestion: false,
         listOfQuestions: [],
-        checkedQuestions: [],
+        addTrivia: true,
+        currentTime: '',
     },
     created: function() {
         // Unload resources after closing tab or browser
@@ -100,26 +92,38 @@ const app = new Vue({
             }
 
             socket.emit('validate-answer', this.answer)
+        },
+        toggle: function() {
+            if (this.addTrivia) {
+                return this.addTrivia = false
+            }
+            else {
+                return this.addTrivia = true
+            }
         }
     },
     components: {
         'users-component': usersComponent,
         'trivia-component': triviaComponent,
         'me-component': meComponent,
-        'questions-component' : questionsComponent,
     }
 })
 
 // Client Side Socket Event
 
+// Refresh time
+socket.on('refresh-time', time => {
+    app.currentTime = time
+})
+
+// Refresh questions obtained from database
 socket.on('refresh-questions', questions => {
-    console.log(questions)
     app.listOfQuestions = questions
 })
 
 // Refresh question
 socket.on('refresh-question', questionObj => {
-    //console.log(questionObj)
+    console.log(questionObj)
     app.questionObj = questionObj
 })
 

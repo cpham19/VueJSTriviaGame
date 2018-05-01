@@ -10,9 +10,9 @@ hr {
 
 /* LEFT COLUMN STYLES */
 
-.col.s4 {
-    background: #2a2f43;
-    border-top: 10px solid #278ca8;
+.col.s3 {
+    background: green;
+    border-top: 10px solid green;
     color: #ffffff;
     font-family: 'Rajdhani', sans-serif;
     font-size: 15px;
@@ -23,18 +23,18 @@ hr {
     box-shadow: 5px 0px 15px -5px rgba(0, 0, 0, 0.5);
 }
 
-.col.s4 input[type=text]:not(.browser-default) {
+.col.s3 input[type=text]:not(.browser-default) {
     color: #FFFFFF;
     font-family: 'Rajdhani', sans-serif;
 }
 
-.col.s4 input[type=text]:not(.browser-default):focus:not([readonly]) {
+.col.s3 input[type=text]:not(.browser-default):focus:not([readonly]) {
     border-bottom: 1px solid #278ca8;
     box-shadow: 0 1px 0 0 #278ca8;
 }
 
-.col.s4 button {
-    background: #278ca8;
+.col.s3 button {
+    background: green;
 }
 
 /* RIGHT COLUMN STYLES */
@@ -47,10 +47,6 @@ hr {
 .col.s8 input[type=text]:not(.browser-default):focus:not([readonly]) {
     border-bottom: 1px solid #2a2f43;
     box-shadow: 0 1px 0 0 #2a2f43;
-}
-
-.col.s8 button {
-    background: #2a2f43;
 }
 
 /* USER LIST STYLES */
@@ -87,38 +83,25 @@ hr {
 }
 
 /* TRIVIA STYLES */
-.question-box {
-    background: #ffffff;
-    border: 5px solid #000000;
-    border-radius: 4px;
-    margin: 10px 5px;
-    min-width: 700px;
-    max-width: 700px;
-    min-height: 200px;
-    max-height: 200px;
-    padding: 10px;
-    overflow-y: auto;
+.row:after {
+    content: "";
+    display: table;
+    clear:both;
 }
 
-.add-box {
-    background: #ffffff;
+.column {
+    float: left;
+    width: 50%;
     border: 5px solid #000000;
-    border-radius: 4px;
-    margin: 10px 5px;
-    min-width: 700px;
-    max-width: 700px;
-    min-height: 200px;
-    max-height: 200px;
-    padding: 10px;
-    overflow-y: auto;
 }
 
 .trivia-box {
     background: #FFFFFF;
     border-radius: 4px;
+    border: 5px solid #000000;
     margin: 25px 5px;
-    min-height: 100px;
-    max-height: 100px;
+    min-height: 500px;
+    max-height: 500px;
     padding: 10px;
     overflow-y: auto;
 }
@@ -143,10 +126,15 @@ hr {
     vertical-align: middle;
 }
 
+.trivia-box button {
+    display: block;
+    width: 100%;
+}
+
 /* ME STYLES */
 
 .me {
-    background: #278ca8;
+    background: purple;
     border-bottom: 1px solid #3e3e6d;
     text-align: center;
     -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
@@ -161,4 +149,34 @@ hr {
 
 .me img {
     background: #FFFFFF;
+}
+
+/* Button */
+.block {
+    display: block;
+    width: 100%;
+    border: none;
+    background-color: green;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.block:hover {
+    background-color: purple
+}
+
+.delete {
+    background-color: red;
+    border: none;
+    color: white;
+    float:right;
+    padding: 10px 10px 10px 10px; 
+    text-align: center;
+    font-size: 12px;
+}
+
+.btn-outline-warning:hover {
+    background-color:blue;
 }
