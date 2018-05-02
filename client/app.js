@@ -2,11 +2,25 @@ const socket = io()
 
 // Trivia component
 const triviaComponent = {
-    template: ` <div class="trivia-box">
-                    <p>{{questionObj.question}}</p>
-	            </div>`,
+    template: ` <div class="trivia-box" v-show="!add">
+                    <h1 align="center">{{time}}</h1>
+                    <h6 align="center">{{question.question}}</h6>
+                    <hr>
+                    <h6 align="center" v-show="time <= 15">The correct answer is: {{question.correctAnswer}}</h6>
+                    <p align="center" v-show= "time > 15 && answered">Please wait until the 15 second mark</p>
+                    <ul v-show="time <= 15" v-for="(occurence, answer) in results">
+                        <li>
+                            <h6>'{{answer}}' was picked {{occurence}} time(s).</h6>
+                        </li>
+                    </ul>
+                    <ul v-show="time > 15 && !answered" v-for="answer in question.possibleAnswers">
+                        <li>
+                            <button v-on:click="$emit('pressed', answer)" class="btn-small waves-effect waves-light" type="submit">{{answer}}</button>
+                        </li>
+                    </ul>
+                </div>`,
 
-	props: ['questionObj']
+	props: ['question', 'time', 'add', 'results', 'answered']
 }
 
 // Users Component
@@ -52,8 +66,10 @@ const app = new Vue({
         questionObj: {},
         failedAddQuestion: false,
         listOfQuestions: [],
-        addTrivia: true,
+        add: true,
         currentTime: '',
+        answered: false,
+        results: {}
     },
     created: function() {
         // Unload resources after closing tab or browser
@@ -86,19 +102,17 @@ const app = new Vue({
         deleteQuestion: function(selectedQuestion) {
             socket.emit('delete-question', selectedQuestion)
         },
-        selectAnswer: function(answer) {
-            if (!this.answer) {
-                return
-            }
+        submitAnswer: function(answer) {
+            this.answered = true
 
-            socket.emit('validate-answer', this.answer)
+            socket.emit('validate-answer', this.me, this.questionObj, answer)
         },
         toggle: function() {
-            if (this.addTrivia) {
-                return this.addTrivia = false
+            if (this.add) {
+                return this.add = false
             }
             else {
-                return this.addTrivia = true
+                return this.add = true
             }
         }
     },
@@ -111,9 +125,16 @@ const app = new Vue({
 
 // Client Side Socket Event
 
+// Display result
+socket.on('display-result', resultObj => {
+    app.results = resultObj
+    app.answered = false
+}) 
+
 // Refresh time
 socket.on('refresh-time', time => {
     app.currentTime = time
+
 })
 
 // Refresh questions obtained from database
@@ -123,7 +144,6 @@ socket.on('refresh-questions', questions => {
 
 // Refresh question
 socket.on('refresh-question', questionObj => {
-    console.log(questionObj)
     app.questionObj = questionObj
 })
 
@@ -134,13 +154,13 @@ socket.on('refresh-users', users => {
 
 // Successfully join (change screen)
 socket.on('successful-join', user => {
-    if (user.name === app.userName) {
+    if (app.userName === user.name) {
         app.me = user
         app.loggedIn = true
         app.failed = ''
         app.password = ''
     }
-
+        
     app.users.push(user)
 })
 
@@ -160,6 +180,13 @@ socket.on('successful-entry', obj => {
     app.correctAnswer = ''
     app.points = ''
     app.listOfQuestions.push(obj)
+})
+
+// Successfully validated answer
+socket.on('successful-validate', obj => {
+    if (obj.name === app.me.name) {
+        app.me.score = obj.score
+    }
 })
 
 // Failed to add a question

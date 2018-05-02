@@ -43,11 +43,8 @@ const findUserByName = userName => User.findOne({ name: { $regex: `^${userName}$
 // Used for validating question using regular expression ('What is...' = 'what is...')
 const findQuestion = question => Question.findOne({ question: { $regex: `^${question}$`, $options: 'i' } })
 
+// Used for removing question in database
 const removeQuestion = question => Question.remove({question: question})
-
-const updateQuestions = () => {
-    return questions().then(listOfQuestions => {return listOfQuestions})
-}
 
 // Validating user for logging in
 const loginUser = (userName, password, socketId) => {
@@ -152,6 +149,17 @@ const deleteQuestion = (question) => {
         .then(questionObj => {return questionObj})
 }
 
+// Update the core
+const updateScore = (userName, score) => {
+    // Return a user object if username is in db
+    return User.findOneAndUpdate({name: userName}, { $set: { score: score } })
+        .then(obj => {
+            // Update the score for the objet that will be sent back to socket.js
+            obj.score = score
+            return obj
+        })
+}
+
 // Logout the user by setting the user's socketid to null
 const logoutUser = socketId => {
     return User.findOneAndUpdate({ socketId }, { $set: { socketId: null } })
@@ -164,5 +172,6 @@ module.exports = {
     logoutUser,
     createQuestion,
     deleteQuestion,
+    updateScore,
     questions
 }

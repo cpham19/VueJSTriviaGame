@@ -57,7 +57,7 @@
          <div class="col s8" v-show="loggedIn">
             <!-- Textfields to add a question to database-->
 
-            <div class="row" v-show="addTrivia">
+            <div class="row" v-show="add">
                 <div class="column">
                     <h6 align="center">Add a question</h6>
                     <hr>
@@ -81,22 +81,29 @@
                     </ul>
                 </div>
             </div>
-            <div v-show="addTrivia">
-                <button v-on:click="toggle()" type="submit">Play Game</button> 
-            </div>
            
-            <div class="trivia-box" v-show="!addTrivia">
+            <!-- <div class="trivia-box" v-show="!addTrivia">
+                <h6 align="center">{{currentTime}}</h7>
                 <h6 align="center">{{questionObj.question}}</h6>
                 <hr>
-                <ul v-for="answer in questionObj.possibleAnswers">
-                    <button v-on:click="submitQuestion(answer)" class="btn-small waves-effect waves-light" type="submit">{{answer}}</button>
+                <h6 align="center" v-show="currentTime <= 15">The correct answer is: {{questionObj.correctAnswer}}</h6>
+                <p align="center" v-show= "currentTime > 15 && answered">Please wait until the 15 second mark</p>
+                <ul v-show="currentTime <= 15" v-for="(occurence, answer) in results">
+                    <li>
+                        <h6>'{{answer}}' was picked {{occurence}} time(s).</h6>
+                    </li>
                 </ul>
-                <button v-on:click="toggle()" type="submit">Add Question</button> 
-            </div>
+                <ul v-show="currentTime > 15 && !answered" v-for="answer in questionObj.possibleAnswers">
+                    <li>
+                        <button v-on:click="submitAnswer(answer)" class="btn-small waves-effect waves-light" type="submit">{{answer}}</button>
+                    </li>
+                </ul>
+            </div> -->
 
             <!-- trivia -->
-            <!-- <trivia-component v-bind:questionObj="questionObj"></trivia-component> -->
-
+            <trivia-component v-on:pressed="submitAnswer" v-bind:question="questionObj" v-bind:time="currentTime" v-bind:add="add" v-bind:results="results" v-bind:answered="answered"></trivia-component>
+            <button v-show="add" v-on:click="toggle()" type="submit">Play Game</button>
+            <button v-show="!add" v-on:click="toggle()" type="submit">Add Question</button>  
          </div>
 
       </div>
