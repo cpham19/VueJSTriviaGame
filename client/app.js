@@ -1,5 +1,19 @@
 const socket = io()
 
+const availableQuestionsComponent = {
+    template:`<div class="column"> 
+                <h6 align="center">Questions in Database ({{list.length}})</h6>
+                <hr>
+                <ul v-for="obj in list">
+                    <li>
+                        <p>{{obj.question}} <button v-on:click="$emit('delete', obj.question)" class="delete" type="submit">Delete</button></p>
+                    </li>
+                    <hr>
+                </ul>
+            </div>`,
+    props: ['list']
+}
+
 // Trivia component
 const triviaComponent = {
     template: ` <div class="trivia-box" v-show="!add">
@@ -120,6 +134,7 @@ const app = new Vue({
         'users-component': usersComponent,
         'trivia-component': triviaComponent,
         'me-component': meComponent,
+        'questions-component': availableQuestionsComponent
     }
 })
 
