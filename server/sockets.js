@@ -48,9 +48,9 @@ module.exports = (server, db) => {
         // demo code only for sockets + db
         // in production login/user creation should happen with a POST to https endpoint
         // upon success - revert to websockets
-        socket.on('create-user', (userName, password) => {
+        socket.on('create-user', (userName, password, admin) => {
             // create user
-            db.createUser(userName, password, socket.id)
+            db.createUser(userName, password, admin, socket.id)
                 // success
                 .then(created => io.emit('successful-join', created))
                 // error

@@ -36,17 +36,20 @@
 
             <!-- start user join -->
             <div class="user-login" v-show="!loggedIn">
-               <input v-model="userName" placeholder="name" type="text" class="u-full-width">
-               <input v-model="password" placeholder="password" type="password" class="u-full-width">
-               <button v-on:click="joinUser" :disabled="!userName" class="btn-small waves-effect waves-light" type="submit">
-                  Login
-               </button>
+                <input v-model="userName" placeholder="name" type="text" class="u-full-width">
+                <input v-model="password" placeholder="password" type="password" class="u-full-width">
+                <button v-on:click="joinUser" :disabled="!userName" class="btn-small waves-effect waves-light" type="submit">Login</button>
+                <button v-on:click="signupUser" :disabled="!userName" class="btn-small waves-effect waves-light" type="submit">Sign Up</button>
+                <div class="switch">
+                    <label>
+                      Regular User
+                      <input type="checkbox" v-model="admin">
+                      <span class="lever"></span>
+                      Admin
+                    </label>
+                  </div>
 
-               <button v-on:click="signupUser" :disabled="!userName" class="btn-small waves-effect waves-light" type="submit">
-                  Sign Up
-               </button>
-
-               <div class="failed" v-show='failedName'>
+                <div class="failed" v-show='failedName'>
                     <p>Username '{{failedName}}' doesn't exists or is logged in!</p>
                 </div>
             </div>
@@ -57,7 +60,7 @@
          <div class="col s8" v-show="loggedIn">
             <!-- Textfields to add a question to database-->
             <div class="row" v-show="add">
-                <div class="column">
+                <div class="column" v-show="admin">
                     <h6 align="center">Add a question</h6>
                     <hr>
                     <input v-model="question" placeholder="question" type="text" class="u-full-width">
@@ -69,7 +72,7 @@
                     <button v-on:click="submitQuestion" class="block" type="submit">Add</button> <p class = "failed" v-show="failedAddQuestion">Correct answer must be one of the possible answers, or points must be a number!</p>
                 </div>
 
-                <questions-component v-on:delete="deleteQuestion" v-bind:list="listOfQuestions"></questions-component>
+                <questions-component v-on:delete="deleteQuestion" v-bind:list="listOfQuestions" v-bind:admin="admin"></questions-component>
             </div>
 
             <!-- trivia -->

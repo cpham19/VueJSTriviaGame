@@ -6,12 +6,13 @@ const availableQuestionsComponent = {
                 <hr>
                 <ul v-for="obj in list">
                     <li>
-                        <p>{{obj.question}} <button v-on:click="$emit('delete', obj.question)" class="delete" type="submit">Delete</button></p>
+                        <p v-show="admin">{{obj.question}} <button v-on:click="$emit('delete', obj.question)" class="delete" type="submit">Delete</button></p>
+                        <p v-show="!admin">{{obj.question}}</p>
                     </li>
                     <hr>
                 </ul>
             </div>`,
-    props: ['list']
+    props: ['list', 'admin']
 }
 
 // Trivia component
@@ -45,6 +46,7 @@ const usersComponent = {
                         <li>
                             <img v-bind:src="user.avatar" class="circle" width="30px">
                             <span>{{user.name}}</span><span>({{user.score}})</span>
+                            <img v-show="user.admin" src="img/admin.png" class="circle" width="15px">
                         </li>
                         <hr>
                     </ul>
@@ -55,8 +57,9 @@ const usersComponent = {
 // Me Component
 const meComponent = {
     template: ` <div class="me" v-show="me.name">
-                    <h5> Welcome </h5>
-                        <img :src="me.avatar" class="circle" width="80px">
+                    <h5 v-show="me.admin"> Welcome Admin </h5>
+                    <h5 v-show="!me.admin"> Welcome </h5>
+                        <img v-bind:src="me.avatar" class="circle" width="80px">
                         <h6>{{me.name}}</h6>
                 </div>`,
     props: ['me']
@@ -68,6 +71,7 @@ const app = new Vue({
         loggedIn: false,
         userName: '',
         password: '',
+        admin: false,
         failedName: '',
         me: {},
         users: [],
@@ -104,7 +108,7 @@ const app = new Vue({
                 return
             }
 
-            socket.emit('create-user', this.userName, this.password)
+            socket.emit('create-user', this.userName, this.password, this.admin)
         },
         submitQuestion: function () {
             if (!this.question || !this.possibleAnswer1 || !this.possibleAnswer2 || !this.possibleAnswer3 || !this.correctAnswer || !this.points) {
@@ -164,6 +168,9 @@ socket.on('refresh-question', questionObj => {
 
 // Refresh userlist
 socket.on('refresh-users', users => {
+    users.sort((a,b) => {
+        return b.score - a.score
+    })
     app.users = users
 })
 
@@ -174,6 +181,7 @@ socket.on('successful-join', user => {
         app.loggedIn = true
         app.failed = ''
         app.password = ''
+        app.admin = user.admin
     }
         
     app.users.push(user)

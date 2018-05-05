@@ -1,4 +1,4 @@
-/* GENERAL STYLES */
+GENERAL STYLES
 
 #chat-app {
     background: #efefef;
@@ -11,9 +11,9 @@ hr {
 /* LEFT COLUMN STYLES */
 
 .col.s3 {
-    background: green;
-    border-top: 10px solid green;
-    color: #ffffff;
+    background: white;
+    border-top: 10px solid black;
+    color: black;
     font-family: 'Rajdhani', sans-serif;
     font-size: 15px;
     height: 100vh;
@@ -24,7 +24,7 @@ hr {
 }
 
 .col.s3 input[type=text]:not(.browser-default) {
-    color: #FFFFFF;
+    color: black;
     font-family: 'Rajdhani', sans-serif;
 }
 
@@ -32,6 +32,17 @@ hr {
     border-bottom: 1px solid #278ca8;
     box-shadow: 0 1px 0 0 #278ca8;
 }
+
+.col.s3 input[type=checkbox]:not(.browser-default) {
+    color: black;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.col.s3 input[type=checkbox]:not(.browser-default):focus:not([readonly]) {
+    border-bottom: 1px solid #278ca8;
+    box-shadow: 0 1px 0 0 #278ca8;
+}
+
 
 .col.s3 button {
     background: green;
@@ -69,7 +80,7 @@ hr {
 }
 
 .user-list span {
-    color: #ffffff;
+    color: black;
     padding: 0 0 0 2px;
 }
 

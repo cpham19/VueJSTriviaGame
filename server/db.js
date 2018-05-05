@@ -15,6 +15,7 @@ const UserSchema = new Mongoose.Schema({
     avatar: String,
     socketId: String,
     password: String,
+    admin: Boolean,
     score: Number,
 }, { strict: false })
 
@@ -72,13 +73,13 @@ const loginUser = (userName, password, socketId) => {
         // active == have socketId
         .then(({ _id }) => User.findOneAndUpdate({ _id }, { $set: { socketId } }))
         // return name and avatar
-        .then(({ name, avatar, score}) => {
-            return { name, avatar, score}
+        .then(({ name, avatar, admin, score}) => {
+            return { name, avatar, admin, score}
         })
 }
 
 // Create a user
-const createUser = (userName, password, socketId) => {
+const createUser = (userName, password, administrator, socketId) => {
     // Return a user object if username is in db
     return findUserByName(userName)
         .then(found => {
@@ -92,6 +93,7 @@ const createUser = (userName, password, socketId) => {
                 socketId,
                 name: userName,
                 password: generateHash(password),
+                admin : administrator,
                 avatar: `https://robohash.org/${userName}`,
                 score: 0
             }
@@ -99,8 +101,8 @@ const createUser = (userName, password, socketId) => {
         // Create user from user object 
         .then(user => User.create(user))
         // Return avatar and name
-        .then(({ name, avatar, score}) => {
-            return { name, avatar, score}
+        .then(({ name, avatar, admin, score}) => {
+            return { name, avatar, admin, score}
         })
 }
 
