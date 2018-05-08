@@ -78,7 +78,8 @@
             <!-- trivia -->
             <trivia-component v-on:pressed="submitAnswer" v-bind:question="questionObj" v-bind:time="currentTime" v-bind:add="add" v-bind:results="results" v-bind:answered="answered"></trivia-component>
             <button v-show="add" v-on:click="toggle()" type="submit">Play Game</button>
-            <button v-show="!add" v-on:click="toggle()" type="submit">Add Question</button>  
+            <button v-show="!add && admin" v-on:click="toggle()" type="submit">Add Question</button>
+            <button v-show="!add && !admin" v-on:click="toggle()" type="submit">View Questions</button>    
          </div>
 
       </div>

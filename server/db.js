@@ -26,7 +26,6 @@ const QuestionSchema = new Mongoose.Schema({
     correctAnswer: String,
     points: Number
 }, { strict: false })
-QuestionSchema.plugin(random)
 
 const User = Mongoose.model('users', UserSchema)
 
